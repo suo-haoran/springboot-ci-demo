@@ -16,15 +16,15 @@ jobs:
       mysql:
         image: mysql:8
 
-      env:
-        MYSQL_ROOT_PASSWORD: root
-        MYSQL_DATABASE: demodb
+        environment:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: demodb
 
-      options: >-
-        --health-cmd mysqladmin ping
-        --health-interval 10s
-        --health-timeout 5s
-        --health-retries 5
+        options: >-
+          --health-cmd mysqladmin ping
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       - name: Checkout code
