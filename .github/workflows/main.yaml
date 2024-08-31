@@ -16,7 +16,7 @@ jobs:
       mysql:
         image: mysql:8
 
-        environment:
+        env:
           MYSQL_ROOT_PASSWORD: root
           MYSQL_DATABASE: demodb
 
