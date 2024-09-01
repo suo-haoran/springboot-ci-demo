@@ -1,7 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.Todo;
-import com.example.demo.model.User;
+import com.example.demo.model.*;
 import com.example.demo.repository.TodoRepository;
 import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +33,12 @@ public class TodoController {
     }
 
     @PostMapping
-    public ResponseEntity<Todo> createTodo(@RequestBody Todo todo) {
-        return userRepository.findById(todo.getUser().getId())
+    public ResponseEntity<Todo> createTodo(@RequestBody CreateTodoRequest todoRequest) {
+        Todo todo = new Todo();
+        return userRepository.findById(todoRequest.getUserId())
                 .map(user -> {
+                    todo.setDescription(todoRequest.getDescription());
+                    todo.setCompleted(todoRequest.getCompleted());
                     todo.setUser(user);
                     Todo savedTodo = todoRepository.save(todo);
                     return new ResponseEntity<>(savedTodo, HttpStatus.CREATED);
@@ -47,7 +49,6 @@ public class TodoController {
     public ResponseEntity<Todo> updateTodo(@PathVariable Long id, @RequestBody Todo todoDetails) {
         return todoRepository.findById(id)
                 .map(todo -> {
-                    todo.setDescription(todoDetails.getDescription());
                     todo.setCompleted(todoDetails.getCompleted());
                     return ResponseEntity.ok().body(todoRepository.save(todo));
                 }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
